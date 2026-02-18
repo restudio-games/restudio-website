@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <title>Restudio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="https://i.postimg.cc/JzYGnt17/restudio-profile.png">
-
-<!-- Google Font: Tiny5 -->
-<link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+<!-- Load Playwrite NZ Basic font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@300;400&display=swap" rel="stylesheet">
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,691 +16,177 @@
 <style>
 body {
     margin: 0;
-    background: #000;
-    height: 100vh;
+    background-color: #000;
+    font-family: 'Playwrite NZ Basic', cursive;
     color: white;
-    font-family: 'Tiny5', monospace;
-    overflow: hidden;
-}
-
-/* ===== Loading Screen ===== */
-#loadingScreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-}
-
-#loadingScreen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loading-text {
-    margin-top: 40px;
-    font-size: 20px;
-    color: #50B854;
+    direction: rtl; /* اتجاه عربي افتراضي */
     text-align: center;
 }
 
-/* ===== Top Bar ===== */
-header {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 55px;
+/* الشعار العلوي */
+.header-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 80px 0;
+}
+
+.header-logo img {
+    max-width: 200px; /* تصغير الشعار */
+    width: 80%;
+}
+
+/* أقسام الصفحة */
+.section {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
-    box-sizing: border-box;
-    background: #000;
-    border-bottom: 1px solid #222;
-    z-index: 10;
+    justify-content: center;
+    gap: 80px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 120px auto;
 }
 
-/* Top logo */
-.top-logo img {
-    height: 28px;
+/* الصورة على اليسار */
+.section .image-left img {
+    max-height: 300px;
+    width: auto;
 }
 
-/* Nav */
-.nav {
+/* النص على اليمين */
+.section .text-right {
+    max-width: 500px;
+    text-align: right;
+}
+
+.section .text-right h2, .section .text-right h1 {
+    color: #50B854;
+    margin: 0 0 15px 0;
+}
+
+.section .text-right p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.section-first .image-left img {
+    max-height: 400px;
+}
+
+.section-first .text-right h1 {
+    font-size: 48px;
+    margin: 0 0 20px 0;
+}
+
+.section-first .text-right p {
+    font-size: 26px;
+}
+
+/* أزرار التواصل الاجتماعي */
+.social-buttons {
     display: flex;
-    gap: 25px;
+    justify-content: center;
+    gap: 0;
+    margin: 20px 0 60px 0;
 }
 
-.nav button {
-    background: none;
+.social-buttons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+/* زر اللغة أسفل الصفحة */
+.lang-btn {
+    background-color: #50B854;
+    color: #000;
     border: none;
-    color: white;
-    font-family: 'Tiny5', monospace;
+    padding: 10px 18px;
     font-size: 16px;
     cursor: pointer;
-    transition: color 0.2s;
-}
-
-.nav button:hover {
-    color: #50B854;
-}
-
-/* ===== Dropdown ===== */
-.dropdown {
-    position: relative;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 35px;
-    right: 0;
-    background: #111;
-    border: 1px solid #222;
-    min-width: 280px;
-    z-index: 20;
-}
-
-.dropdown-content a {
-    display: block;
-    padding: 12px 15px;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.dropdown-content a:hover {
-    background: #1a1a1a;
-    color: #50B854;
-}
-
-/* ===== Center Logo ===== */
-.logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-
-.logo.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.logo img {
-    width: 320px;
-    max-width: 80vw;
-}
-
-/* ===== About Page ===== */
-#aboutPage {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: #000;
-    padding: 100px 30px;
-    box-sizing: border-box;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-#aboutPage.visible {
-    display: block;
-    opacity: 1;
-}
-
-#aboutPage p {
-    max-width: 700px;
-    font-size: 18px;
-    line-height: 1.8;
-    margin: 0 auto;
-}
-
-#aboutPage a {
-    color: #50B854;
-    text-decoration: none;
-}
-
-#aboutPage a:hover {
-    text-decoration: underline;
-}
-
-/* ===== Footer ===== */
-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    border-top: 1px solid #222;
-    font-size: 12px;
-    z-index: 5;
-}
-
-.footer-icons {
-    display: flex;
-    gap: 28px;
-}
-
-.footer-icons a {
-    color: white;
-    font-size: 22px;
-    transition: color 0.2s;
-}
-
-.footer-icons a:hover {
-    color: #50B854;
-}
-
-.footer-copy {
-    color: #777;
-}
-
-/* ===== Ghost Loading Animation ===== */
-#ghost {
-    position: relative;
-    scale: 0.8;
-}
-
-#red {
-    animation: upNDown infinite 0.5s;
-    position: relative;
-    width: 140px;
-    height: 140px;
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    grid-template-rows: repeat(14, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    grid-template-areas:
-        "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
-        "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
-        "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
-        "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
-        "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
-        "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
-        "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
-}
-
-@keyframes upNDown {
-    0%,
-    49% {
-        transform: translateY(0px);
-    }
-    50%,
-    100% {
-        transform: translateY(-10px);
-    }
-}
-
-#top0,
-#top1,
-#top2,
-#top3,
-#top4,
-#st0,
-#st1,
-#st2,
-#st3,
-#st4,
-#st5 {
-    background-color: red;
-}
-
-#top0 {
-    grid-area: top0;
-}
-
-#top1 {
-    grid-area: top1;
-}
-
-#top2 {
-    grid-area: top2;
-}
-
-#top3 {
-    grid-area: top3;
-}
-
-#top4 {
-    grid-area: top4;
-}
-
-#st0 {
-    grid-area: st0;
-}
-
-#st1 {
-    grid-area: st1;
-}
-
-#st2 {
-    grid-area: st2;
-}
-
-#st3 {
-    grid-area: st3;
-}
-
-#st4 {
-    grid-area: st4;
-}
-
-#st5 {
-    grid-area: st5;
-}
-
-#an1 {
-    grid-area: an1;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an18 {
-    grid-area: an18;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an2 {
-    grid-area: an2;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an17 {
-    grid-area: an17;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an3 {
-    grid-area: an3;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an16 {
-    grid-area: an16;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an4 {
-    grid-area: an4;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an15 {
-    grid-area: an15;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an6 {
-    grid-area: an6;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an12 {
-    grid-area: an12;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an7 {
-    grid-area: an7;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an13 {
-    grid-area: an13;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an9 {
-    grid-area: an9;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an10 {
-    grid-area: an10;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an8 {
-    grid-area: an8;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an11 {
-    grid-area: an11;
-    animation: flicker0 infinite 0.5s;
-}
-
-@keyframes flicker0 {
-    0%,
-    49% {
-        background-color: red;
-    }
-    50%,
-    100% {
-        background-color: transparent;
-    }
-}
-
-@keyframes flicker1 {
-    0%,
-    49% {
-        background-color: transparent;
-    }
-    50%,
-    100% {
-        background-color: red;
-    }
-}
-
-#eye {
-    width: 40px;
-    height: 50px;
-    position: absolute;
-    top: 30px;
-    left: 10px;
-}
-
-#eye::before {
-    content: "";
-    background-color: white;
-    width: 20px;
-    height: 50px;
-    transform: translateX(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye::after {
-    content: "";
-    background-color: white;
-    width: 40px;
-    height: 30px;
-    transform: translateY(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye1 {
-    width: 40px;
-    height: 50px;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-}
-
-#eye1::before {
-    content: "";
-    background-color: white;
-    width: 20px;
-    height: 50px;
-    transform: translateX(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye1::after {
-    content: "";
-    background-color: white;
-    width: 40px;
-    height: 30px;
-    transform: translateY(10px);
-    display: block;
-    position: absolute;
-}
-
-#pupil {
-    width: 20px;
-    height: 20px;
-    background-color: blue;
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    z-index: 1;
-    animation: eyesMovement infinite 3s;
-}
-
-#pupil1 {
-    width: 20px;
-    height: 20px;
-    background-color: blue;
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    z-index: 1;
-    animation: eyesMovement infinite 3s;
-}
-
-@keyframes eyesMovement {
-    0%,
-    49% {
-        transform: translateX(0px);
-    }
-    50%,
-    99% {
-        transform: translateX(10px);
-    }
-    100% {
-        transform: translateX(0px);
-    }
-}
-
-#shadow {
-    background-color: black;
-    width: 140px;
-    height: 140px;
-    position: absolute;
-    border-radius: 50%;
-    transform: rotateX(80deg);
-    filter: blur(20px);
-    top: 80%;
-    animation: shadowMovement infinite 0.5s;
-}
-
-@keyframes shadowMovement {
-    0%,
-    49% {
-        opacity: 0.5;
-    }
-    50%,
-    100% {
-        opacity: 0.2;
-    }
+    border-radius: 6px;
+    margin-bottom: 20px;
 }
 </style>
 </head>
-
 <body>
 
-<!-- Loading Screen -->
-<div id="loadingScreen" class="hidden">
-    <!-- From Uiverse.io by BlackisPlay -->
-    <div id="ghost">
-        <div id="red">
-            <div id="pupil"></div>
-            <div id="pupil1"></div>
-            <div id="eye"></div>
-            <div id="eye1"></div>
-            <div id="top0"></div>
-            <div id="top1"></div>
-            <div id="top2"></div>
-            <div id="top3"></div>
-            <div id="top4"></div>
-            <div id="st0"></div>
-            <div id="st1"></div>
-            <div id="st2"></div>
-            <div id="st3"></div>
-            <div id="st4"></div>
-            <div id="st5"></div>
-            <div id="an1"></div>
-            <div id="an2"></div>
-            <div id="an3"></div>
-            <div id="an4"></div>
-            <div id="an5"></div>
-            <div id="an6"></div>
-            <div id="an7"></div>
-            <div id="an8"></div>
-            <div id="an9"></div>
-            <div id="an10"></div>
-            <div id="an11"></div>
-            <div id="an12"></div>
-            <div id="an13"></div>
-            <div id="an14"></div>
-            <div id="an15"></div>
-            <div id="an16"></div>
-            <div id="an17"></div>
-            <div id="an18"></div>
-        </div>
-        <div id="shadow"></div>
-    </div>
-    <div class="loading-text">Restudio Loading...</div>
+<!-- الشعار العلوي -->
+<div class="header-logo">
+    <img src="https://i.postimg.cc/YCHdY4mw/swrh-restudio.png" alt="Restudio Logo">
 </div>
 
-<header>
-    <div class="top-logo">
-        <img src="https://i.postimg.cc/yNCH6zwp/swrh-restudio.png" alt="Restudio">
+<!-- القسم الأول -->
+<div class="section section-first">
+    <div class="image-left">
+        <img src="https://i.postimg.cc/XqfPF9Lh/line-art-of-a-14-year.png" alt="Art">
     </div>
-
-    <div class="nav">
-        <button onclick="showHome()">Home</button>
-
-        <div class="dropdown">
-            <button onclick="toggleApps()">Apps</button>
-            <div class="dropdown-content" id="appsMenu">
-                <a href="https://restudio-games.github.io/MSX-WEBSITE/" target="_blank">
-                    Motion Studio X
-                </a>
-                <a href="https://restudio-games.itch.io/" target="_blank">
-                    Check out projects on itch.io
-                </a>
-            </div>
-        </div>
-
-        <button onclick="showAbout()">About</button>
+    <div class="text-right">
+        <h1 data-ar="مرحبًا!" data-en="Welcome!">مرحبًا!</h1>
+        <p data-ar="نريد إحياء فكرة عمرها 44 عامًا!" data-en="We want to revive a 44-year-old idea!">نريد إحياء فكرة عمرها 44 عامًا!</p>
     </div>
-</header>
-
-<!-- Center Logo -->
-<div class="logo" id="logo">
-    <img src="https://i.postimg.cc/yNCH6zwp/swrh-restudio.png" alt="Restudio Logo">
 </div>
 
-<!-- About Page -->
-<div id="aboutPage">
-    <p>
-        Restudio was founded in January 2025.  
-        We are passionate about game development and creating useful tools like
-        <a href="https://restudio-games.itch.io/pixmancer" target="_blank">Pixmancer</a>
-        and
-        <a href="https://restudio-games.itch.io/wetbox-game-engine" target="_blank">Wetbox</a>.
-    </p>
+<!-- القسم الثاني: ماهي الفكرة؟ -->
+<div class="section">
+    <div class="image-left">
+        <img src="https://i.postimg.cc/0yswcDfk/sakher-logo-line-art.png" alt="Sakher">
+    </div>
+    <div class="text-right">
+        <h2 data-ar="ماهي الفكرة؟" data-en="What is the idea?">ماهي الفكرة؟</h2>
+        <p data-ar="هي فكرة مستوحاة من صخر التي أدخلت اللغة العربية في الحواسيب. نحن نريد إحياء الفكرة وجعلها متطورة جدًا." 
+           data-en="It is an idea inspired by Sakher, which introduced Arabic into computers. We want to revive the idea and make it very advanced.">
+           هي فكرة مستوحاة من صخر التي أدخلت اللغة العربية في الحواسيب. نحن نريد إحياء الفكرة وجعلها متطورة جدًا.
+        </p>
+    </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    <div class="footer-icons">
-        <a href="https://github.com/restudio-games" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="https://www.tiktok.com/@restudiogames" target="_blank"><i class="fa-brands fa-tiktok""></i></a>
-        <a href="https://www.instagram.com/restudio_games/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://x.com/RESTUDIO_GAMES" target="_blank"><i class="fab fa-x-twitter"></i></a>
-        <a href="https://restudio-games.itch.io/" target="_blank"><i class="fa-brands fa-itch-io"></i></a>
+<!-- القسم الثالث: ماهي التطويرات؟ -->
+<div class="section">
+    <div class="image-left">
+        <img src="https://i.postimg.cc/0jXV7ZmV/world.png" alt="Development">
     </div>
-    <div class="footer-copy">
-        © 2026 Restudio Games. All rights reserved.
+    <div class="text-right">
+        <h2 data-ar="ماهي التطويرات في الفكرة؟" data-en="What are the developments in the idea?">ماهي التطويرات في الفكرة؟</h2>
+        <p data-ar="مثل تصنيع أنظمة التشغيل والتطبيقات والخدمات المختلفة." 
+           data-en="Such as developing operating systems, applications, and various services.">
+           مثل تصنيع أنظمة التشغيل والتطبيقات والخدمات المختلفة.
+        </p>
     </div>
-</footer>
+</div>
+
+<!-- زر اللغة -->
+<button class="lang-btn" id="langBtn">English</button>
+
+<!-- أزرار التواصل الاجتماعي -->
+<div class="social-buttons">
+    <a href="https://github.com/restudio-games" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a href="https://www.tiktok.com/@restudiogames" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+    <a href="https://restudio-games.itch.io/" target="_blank"><i class="fa-brands fa-itch-io"></i></a>
+    <a href="https://www.instagram.com/restudio_games/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://x.com/RESTUDIO_GAMES" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+</div>
 
 <script>
-// حالات التطبيق
-let currentPage = 'home';
+// تبديل اللغة بين العربية والإنجليزية
+const langBtn = document.getElementById('langBtn');
+let isArabic = true;
 
-// وظيفة عرض شاشة التحميل
-function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    loadingScreen.classList.remove('hidden');
-    
-    // إخفاء شاشة التحميل بعد 3 ثواني
-    setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-    }, 3000);
-}
-
-// وظيفة التبديل بين الصفحات مع شاشة التحميل
-function navigateTo(page) {
-    // إذا كنا بالفعل في الصفحة المطلوبة، لا تفعل شيئاً
-    if (currentPage === page) return;
-    
-    // عرض شاشة التحميل
-    showLoadingScreen();
-    
-    // تحديث الحالة الحالية
-    currentPage = page;
-    
-    // إخفاء القائمة المنسدلة
-    document.getElementById("appsMenu").style.display = "none";
-}
-
-// وظيفة عرض الصفحة الرئيسية
-function showHome() {
-    navigateTo('home');
-    
-    setTimeout(() => {
-        // إخفاء صفحة about
-        const aboutPage = document.getElementById("aboutPage");
-        aboutPage.classList.remove("visible");
-        
-        // إظهار الشعار
-        const logo = document.getElementById("logo");
-        logo.classList.remove("hidden");
-    }, 100);
-}
-
-// وظيفة عرض صفحة about
-function showAbout() {
-    navigateTo('about');
-    
-    setTimeout(() => {
-        // إخفاء الشعار
-        const logo = document.getElementById("logo");
-        logo.classList.add("hidden");
-        
-        // إظهار صفحة about
-        const aboutPage = document.getElementById("aboutPage");
-        aboutPage.classList.add("visible");
-    }, 100);
-}
-
-// وظيفة التبديل لقائمة التطبيقات (بدون تحميل)
-function toggleApps() {
-    const menu = document.getElementById("appsMenu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-// عند تحميل الصفحة، إخفاء شاشة التحميل
-window.addEventListener('load', () => {
-    // إخفاء شاشة التحميل بعد تحميل الصفحة
-    setTimeout(() => {
-        document.getElementById('loadingScreen').classList.add('hidden');
-    }, 500);
+langBtn.addEventListener('click', () => {
+    const elements = document.querySelectorAll('[data-ar]');
+    elements.forEach(el => {
+        el.textContent = isArabic ? el.dataset.en : el.dataset.ar;
+    });
+    isArabic = !isArabic;
+    langBtn.textContent = isArabic ? 'English' : 'العربية';
+    document.body.dir = isArabic ? 'rtl' : 'ltr';
 });
 </script>
 
