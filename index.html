@@ -8,8 +8,8 @@
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="https://i.postimg.cc/JzYGnt17/restudio-profile.png">
 
-<!-- Google Font: Tiny5 -->
-<link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+<!-- Google Fonts: Tiny5 & Jersey 15 -->
+<link href="https://fonts.googleapis.com/css2?family=Tiny5&family=Jersey+15&display=swap" rel="stylesheet">
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -22,6 +22,23 @@ body {
     color: white;
     font-family: 'Tiny5', monospace;
     overflow: hidden;
+    position: relative;
+}
+
+/* طبقة الخلفية مع الصورة وتعتيمها */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.postimg.cc/gjTtS1tN/Untitled-design-(6).png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.7); /* تعتيم الخلفية */
+    z-index: -1;
 }
 
 /* ===== Loading Screen ===== */
@@ -65,7 +82,7 @@ header {
     box-sizing: border-box;
     background: #000;
     border-bottom: 1px solid #222;
-    z-index: 10;
+    z-index: 20;
 }
 
 /* Top logo */
@@ -122,24 +139,26 @@ header {
     color: #50B854;
 }
 
-/* ===== Center Logo ===== */
-.logo {
+/* ===== النص الرئيسي ===== */
+#mainText {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-family: 'Jersey 15', sans-serif;
+    font-size: 4rem;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
     opacity: 1;
     transition: opacity 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    z-index: 5;
 }
 
-.logo.hidden {
+#mainText.hidden {
     opacity: 0;
     pointer-events: none;
-}
-
-.logo img {
-    width: 320px;
-    max-width: 80vw;
 }
 
 /* ===== About Page ===== */
@@ -152,6 +171,8 @@ header {
     box-sizing: border-box;
     opacity: 0;
     transition: opacity 0.3s ease;
+    z-index: 10;
+    overflow-y: auto;
 }
 
 #aboutPage.visible {
@@ -164,6 +185,7 @@ header {
     font-size: 18px;
     line-height: 1.8;
     margin: 0 auto;
+    color: white;
 }
 
 #aboutPage a {
@@ -187,7 +209,8 @@ footer {
     gap: 8px;
     border-top: 1px solid #222;
     font-size: 12px;
-    z-index: 5;
+    z-index: 15;
+    background: #000; /* خلفية سوداء صلبة */
 }
 
 .footer-icons {
@@ -576,6 +599,7 @@ footer {
     <div class="loading-text">Restudio Loading...</div>
 </div>
 
+<!-- الشريط العلوي -->
 <header>
     <div class="top-logo">
         <img src="https://i.postimg.cc/yNCH6zwp/swrh-restudio.png" alt="Restudio">
@@ -587,7 +611,8 @@ footer {
         <div class="dropdown">
             <button onclick="toggleApps()">Apps</button>
             <div class="dropdown-content" id="appsMenu">
-                <a href="https://motion-studio-x.onrender.com/" target="_blank">
+                <!-- تم تغيير الرابط هنا -->
+                <a href="https://restudio-games.github.io/MSX-WEBSITE/" target="_blank">
                     Motion Studio X
                 </a>
                 <a href="https://restudio-games.itch.io/" target="_blank">
@@ -600,10 +625,8 @@ footer {
     </div>
 </header>
 
-<!-- Center Logo -->
-<div class="logo" id="logo">
-    <img src="https://i.postimg.cc/yNCH6zwp/swrh-restudio.png" alt="Restudio Logo">
-</div>
+<!-- النص الرئيسي -->
+<div id="mainText">We make beautiful games 💚</div>
 
 <!-- About Page -->
 <div id="aboutPage">
@@ -616,7 +639,7 @@ footer {
     </p>
 </div>
 
-<!-- Footer -->
+<!-- الشريط السفلي - أسود -->
 <footer>
     <div class="footer-icons">
         <a href="https://github.com/restudio-games" target="_blank"><i class="fab fa-github"></i></a>
@@ -669,9 +692,9 @@ function showHome() {
         const aboutPage = document.getElementById("aboutPage");
         aboutPage.classList.remove("visible");
         
-        // إظهار الشعار
-        const logo = document.getElementById("logo");
-        logo.classList.remove("hidden");
+        // إظهار النص الرئيسي
+        const mainText = document.getElementById("mainText");
+        mainText.classList.remove("hidden");
     }, 100);
 }
 
@@ -680,9 +703,9 @@ function showAbout() {
     navigateTo('about');
     
     setTimeout(() => {
-        // إخفاء الشعار
-        const logo = document.getElementById("logo");
-        logo.classList.add("hidden");
+        // إخفاء النص الرئيسي
+        const mainText = document.getElementById("mainText");
+        mainText.classList.add("hidden");
         
         // إظهار صفحة about
         const aboutPage = document.getElementById("aboutPage");
@@ -690,7 +713,7 @@ function showAbout() {
     }, 100);
 }
 
-// وظيفة التبديل لقائمة التطبيقات (بدون تحميل)
+// وظيفة التبديل لقائمة التطبيقات
 function toggleApps() {
     const menu = document.getElementById("appsMenu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -702,6 +725,16 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         document.getElementById('loadingScreen').classList.add('hidden');
     }, 500);
+});
+
+// إغلاق القائمة المنسدلة عند النقر في أي مكان آخر
+window.addEventListener('click', (event) => {
+    const menu = document.getElementById("appsMenu");
+    const button = document.querySelector('.dropdown button');
+    
+    if (button && !button.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = "none";
+    }
 });
 </script>
 
