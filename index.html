@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<title>Restudio</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restudio — Game Dev Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="https://i.postimg.cc/JzYGnt17/restudio-profile.png">
@@ -11,67 +11,66 @@
 <!-- Google Fonts: Tiny5 & Jersey 15 -->
 <link href="https://fonts.googleapis.com/css2?family=Tiny5&family=Jersey+15&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     background: #000;
-    height: 100vh;
+    min-height: 100vh;
     color: white;
     font-family: 'Tiny5', monospace;
-    overflow: hidden;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-/* طبقة الخلفية مع الصورة وتعتيمها */
+/* خلفية سوداء نقية مع تعتيم خفيف جداً للصورة */
 body::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://i.postimg.cc/gjTtS1tN/Untitled-design-(6).png');
+    background-image: url('https://i.postimg.cc/Kv6RGSkW/City3-pale.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: brightness(0.7); /* تعتيم الخلفية */
-    z-index: -1;
+    opacity: 0.79;
+    z-index: -2;
 }
 
-/* ===== Loading Screen ===== */
-#loadingScreen {
+/* طبقة سوداء إضافية لتغميق الخلفية وجعلها واضحة */
+body::after {
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
+    opacity: 0.7;
+    z-index: -1;
 }
 
-#loadingScreen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loading-text {
-    margin-top: 40px;
-    font-size: 20px;
-    color: #50B854;
-    text-align: center;
+/* Main content area */
+.main-content {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 24px 50px 24px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== Top Bar ===== */
 header {
-    position: absolute;
+    position: sticky;
     top: 0;
     width: 100%;
     height: 55px;
@@ -79,18 +78,16 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 25px;
-    box-sizing: border-box;
-    background: #000;
+    background: #000000;
     border-bottom: 1px solid #222;
-    z-index: 20;
+    z-index: 30;
+    flex-shrink: 0;
 }
 
-/* Top logo */
 .top-logo img {
     height: 28px;
 }
 
-/* Nav */
 .nav {
     display: flex;
     gap: 25px;
@@ -120,18 +117,19 @@ header {
     position: absolute;
     top: 35px;
     right: 0;
-    background: #111;
-    border: 1px solid #222;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
     min-width: 280px;
-    z-index: 20;
+    z-index: 40;
 }
 
 .dropdown-content a {
     display: block;
     padding: 12px 15px;
-    color: white;
+    color: #e0e0e0;
     text-decoration: none;
     font-size: 14px;
+    font-family: 'Tiny5', monospace;
 }
 
 .dropdown-content a:hover {
@@ -139,517 +137,333 @@ header {
     color: #50B854;
 }
 
-/* ===== النص الرئيسي ===== */
-#mainText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Jersey 15', sans-serif;
-    font-size: 4rem;
-    color: white;
+/* ===== Hero Section ===== */
+.hero-section {
     text-align: center;
-    white-space: nowrap;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    z-index: 5;
+    padding: 60px 20px 50px 20px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 40px;
 }
 
-#mainText.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* ===== About Page ===== */
-#aboutPage {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: #000;
-    padding: 100px 30px;
-    box-sizing: border-box;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 10;
-    overflow-y: auto;
-}
-
-#aboutPage.visible {
-    display: block;
-    opacity: 1;
-}
-
-#aboutPage p {
-    max-width: 700px;
-    font-size: 18px;
-    line-height: 1.8;
-    margin: 0 auto;
+.main-title {
+    font-family: 'Jersey 15', sans-serif;
+    font-size: 3.5rem;
     color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
-#aboutPage a {
+.main-tagline {
+    font-family: 'Tiny5', monospace;
+    font-size: 1rem;
+    color: #888;
+    margin-top: 12px;
+}
+
+/* ===== About Section - عادي جداً ===== */
+.about-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 70px; /* هام: تعويض الـ sticky header عند التمرير */
+}
+
+.about-section h2 {
+    font-family: 'Tiny5', monospace;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: normal;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.about-section p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cccccc;
+    font-family: 'Tiny5', monospace;
+    margin-bottom: 16px;
+}
+
+.about-section a {
     color: #50B854;
     text-decoration: none;
 }
 
-#aboutPage a:hover {
+.about-section a:hover {
     text-decoration: underline;
+    color: #7ed956;
 }
 
-/* ===== Footer ===== */
-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    border-top: 1px solid #222;
-    font-size: 12px;
-    z-index: 15;
-    background: #000; /* خلفية سوداء صلبة */
+.simple-list {
+    list-style: none;
+    margin: 20px 0 10px 0;
+    padding-left: 0;
 }
 
-.footer-icons {
-    display: flex;
-    gap: 28px;
+.simple-list li {
+    font-size: 14px;
+    color: #bbbbbb;
+    margin-bottom: 8px;
+    font-family: 'Tiny5', monospace;
 }
 
-.footer-icons a {
-    color: white;
-    font-size: 22px;
-    transition: color 0.2s;
-}
-
-.footer-icons a:hover {
+.simple-list li::before {
+    content: "› ";
     color: #50B854;
 }
 
+/* ===== FOOTER ===== */
+footer {
+    width: 100%;
+    background: #000000;
+    border-top: 1px solid #222;
+    padding: 20px 24px 20px 24px;
+    font-family: 'Tiny5', monospace;
+    flex-shrink: 0;
+    margin-top: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1f1f1f;
+    padding-bottom: 18px;
+}
+
+.footer-section {
+    min-width: 160px;
+}
+
+.footer-section h4 {
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    color: #50B854;
+    font-weight: normal;
+    border-left: 2px solid #50B854;
+    padding-left: 8px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section li {
+    margin-bottom: 8px;
+}
+
+.footer-section a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.2s;
+}
+
+.footer-section a:hover {
+    color: #50B854;
+}
+
+.footer-section li span {
+    color: #888;
+    font-size: 12px;
+}
+
+/* New style for inactive/placeholder items (non-link) */
+.footer-section .inactive-item {
+    color: #555;
+    font-size: 12px;
+    cursor: default;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.footer-social a {
+    display: inline-block;
+    line-height: 0;
+}
+
+.footer-social img {
+    width: 26px;
+    height: 26px;
+    filter: brightness(0.8);
+    transition: filter 0.2s;
+}
+
+.footer-social a:hover img {
+    filter: brightness(1.2);
+}
+
 .footer-copy {
-    color: #777;
+    text-align: center;
+    font-size: 10px;
+    color: #5a5a5a;
 }
 
-/* ===== Ghost Loading Animation ===== */
-#ghost {
-    position: relative;
-    scale: 0.8;
-}
-
-#red {
-    animation: upNDown infinite 0.5s;
-    position: relative;
-    width: 140px;
-    height: 140px;
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    grid-template-rows: repeat(14, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    grid-template-areas:
-        "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
-        "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
-        "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
-        "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
-        "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
-        "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
-        "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
-        "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
-}
-
-@keyframes upNDown {
-    0%,
-    49% {
-        transform: translateY(0px);
+/* Responsive */
+@media (max-width: 720px) {
+    .footer-main {
+        flex-direction: column;
+        gap: 20px;
     }
-    50%,
-    100% {
-        transform: translateY(-10px);
+    .main-title {
+        font-size: 2.2rem;
+    }
+    .hero-section {
+        padding: 40px 15px 30px 15px;
+    }
+    .main-content {
+        padding: 20px 18px 40px 18px;
+    }
+    header {
+        padding: 0 15px;
+    }
+    .nav {
+        gap: 12px;
+    }
+    .nav button {
+        font-size: 14px;
     }
 }
 
-#top0,
-#top1,
-#top2,
-#top3,
-#top4,
-#st0,
-#st1,
-#st2,
-#st3,
-#st4,
-#st5 {
-    background-color: red;
-}
-
-#top0 {
-    grid-area: top0;
-}
-
-#top1 {
-    grid-area: top1;
-}
-
-#top2 {
-    grid-area: top2;
-}
-
-#top3 {
-    grid-area: top3;
-}
-
-#top4 {
-    grid-area: top4;
-}
-
-#st0 {
-    grid-area: st0;
-}
-
-#st1 {
-    grid-area: st1;
-}
-
-#st2 {
-    grid-area: st2;
-}
-
-#st3 {
-    grid-area: st3;
-}
-
-#st4 {
-    grid-area: st4;
-}
-
-#st5 {
-    grid-area: st5;
-}
-
-#an1 {
-    grid-area: an1;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an18 {
-    grid-area: an18;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an2 {
-    grid-area: an2;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an17 {
-    grid-area: an17;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an3 {
-    grid-area: an3;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an16 {
-    grid-area: an16;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an4 {
-    grid-area: an4;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an15 {
-    grid-area: an15;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an6 {
-    grid-area: an6;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an12 {
-    grid-area: an12;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an7 {
-    grid-area: an7;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an13 {
-    grid-area: an13;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an9 {
-    grid-area: an9;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an10 {
-    grid-area: an10;
-    animation: flicker1 infinite 0.5s;
-}
-
-#an8 {
-    grid-area: an8;
-    animation: flicker0 infinite 0.5s;
-}
-
-#an11 {
-    grid-area: an11;
-    animation: flicker0 infinite 0.5s;
-}
-
-@keyframes flicker0 {
-    0%,
-    49% {
-        background-color: red;
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 1.8rem;
     }
-    50%,
-    100% {
-        background-color: transparent;
+    .about-section p {
+        font-size: 13px;
     }
-}
-
-@keyframes flicker1 {
-    0%,
-    49% {
-        background-color: transparent;
-    }
-    50%,
-    100% {
-        background-color: red;
-    }
-}
-
-#eye {
-    width: 40px;
-    height: 50px;
-    position: absolute;
-    top: 30px;
-    left: 10px;
-}
-
-#eye::before {
-    content: "";
-    background-color: white;
-    width: 20px;
-    height: 50px;
-    transform: translateX(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye::after {
-    content: "";
-    background-color: white;
-    width: 40px;
-    height: 30px;
-    transform: translateY(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye1 {
-    width: 40px;
-    height: 50px;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-}
-
-#eye1::before {
-    content: "";
-    background-color: white;
-    width: 20px;
-    height: 50px;
-    transform: translateX(10px);
-    display: block;
-    position: absolute;
-}
-
-#eye1::after {
-    content: "";
-    background-color: white;
-    width: 40px;
-    height: 30px;
-    transform: translateY(10px);
-    display: block;
-    position: absolute;
-}
-
-#pupil {
-    width: 20px;
-    height: 20px;
-    background-color: blue;
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    z-index: 1;
-    animation: eyesMovement infinite 3s;
-}
-
-#pupil1 {
-    width: 20px;
-    height: 20px;
-    background-color: blue;
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    z-index: 1;
-    animation: eyesMovement infinite 3s;
-}
-
-@keyframes eyesMovement {
-    0%,
-    49% {
-        transform: translateX(0px);
-    }
-    50%,
-    99% {
-        transform: translateX(10px);
-    }
-    100% {
-        transform: translateX(0px);
-    }
-}
-
-#shadow {
-    background-color: black;
-    width: 140px;
-    height: 140px;
-    position: absolute;
-    border-radius: 50%;
-    transform: rotateX(80deg);
-    filter: blur(20px);
-    top: 80%;
-    animation: shadowMovement infinite 0.5s;
-}
-
-@keyframes shadowMovement {
-    0%,
-    49% {
-        opacity: 0.5;
-    }
-    50%,
-    100% {
-        opacity: 0.2;
+    .simple-list li {
+        font-size: 12px;
     }
 }
 </style>
 </head>
-
 <body>
 
-<!-- Loading Screen -->
-<div id="loadingScreen" class="hidden">
-    <!-- From Uiverse.io by BlackisPlay -->
-    <div id="ghost">
-        <div id="red">
-            <div id="pupil"></div>
-            <div id="pupil1"></div>
-            <div id="eye"></div>
-            <div id="eye1"></div>
-            <div id="top0"></div>
-            <div id="top1"></div>
-            <div id="top2"></div>
-            <div id="top3"></div>
-            <div id="top4"></div>
-            <div id="st0"></div>
-            <div id="st1"></div>
-            <div id="st2"></div>
-            <div id="st3"></div>
-            <div id="st4"></div>
-            <div id="st5"></div>
-            <div id="an1"></div>
-            <div id="an2"></div>
-            <div id="an3"></div>
-            <div id="an4"></div>
-            <div id="an5"></div>
-            <div id="an6"></div>
-            <div id="an7"></div>
-            <div id="an8"></div>
-            <div id="an9"></div>
-            <div id="an10"></div>
-            <div id="an11"></div>
-            <div id="an12"></div>
-            <div id="an13"></div>
-            <div id="an14"></div>
-            <div id="an15"></div>
-            <div id="an16"></div>
-            <div id="an17"></div>
-            <div id="an18"></div>
-        </div>
-        <div id="shadow"></div>
-    </div>
-    <div class="loading-text">Restudio Loading...</div>
-</div>
-
-<!-- الشريط العلوي -->
 <header>
     <div class="top-logo">
         <img src="https://i.postimg.cc/yNCH6zwp/swrh-restudio.png" alt="Restudio">
     </div>
-
     <div class="nav">
-        <button onclick="showHome()">Home</button>
-
+        <button onclick="scrollToHero()">Home</button>
         <div class="dropdown">
             <button onclick="toggleApps()">Apps</button>
             <div class="dropdown-content" id="appsMenu">
-                <!-- الروابط الثلاثة كاملة كما في الكود الأصلي، مع ترتيب: Restudio Script Editor أولاً، ثم Motion Studio X، ثم itch.io -->
-                <a href="https://restudio-games.github.io/restudio-script-editor/" target="_blank">
-                    Restudio Script Editor
-                </a>
-                <a href="https://restudio-games.github.io/MSX-WEBSITE/" target="_blank">
-                    Motion Studio X
-                </a>
-                <a href="https://restudio-games.itch.io/" target="_blank">
-                    Check out projects on itch.io
-                </a>
+                <a href="https://restudio-games.github.io/restudio-script-editor/" target="_blank">Restudio Script Editor</a>
+                <a href="https://restudio-games.github.io/MSX-WEBSITE/" target="_blank">Motion Studio X</a>
+                <a href="https://restudio-games.itch.io/" target="_blank">Check out projects on itch.io</a>
             </div>
         </div>
-
-        <button onclick="showAbout()">About</button>
+        <button onclick="scrollToAbout()">About</button>
     </div>
 </header>
 
-<!-- النص الرئيسي -->
-<div id="mainText">We make beautiful games 💚</div>
+<div class="main-content">
+    <!-- Hero section -->
+    <div class="hero-section" id="heroSection">
+        <div class="main-title">We make beautiful games 💚</div>
+        <div class="main-tagline">crafting experiences · building tools</div>
+    </div>
 
-<!-- About Page -->
-<div id="aboutPage">
-    <p>
-        Restudio was founded in January 2025.  
-        We are passionate about game development and creating useful tools like
-        <a href="https://restudio-games.itch.io/pixmancer" target="_blank">Pixmancer</a>
-        and
-        <a href="https://restudio-games.itch.io/wetbox-game-engine" target="_blank">Wetbox</a>.
-    </p>
+    <!-- About section - عادي جداً بدون أي زخارف -->
+    <div class="about-section" id="aboutSection">
+        <h2>about restudio</h2>
+        <p>Restudio was founded in January 2025. We are passionate about game development and creating useful tools for developers and creators.</p>
+        <p>Our main projects include <a href="https://restudio-games.itch.io/pixmancer" target="_blank">Pixmancer</a>, a pixel art companion tool, and <a href="https://restudio-games.itch.io/wetbox-game-engine" target="_blank">Wetbox Game Engine</a>, a lightweight framework for indie developers.</p>
+        <p>We also build tools like Restudio Script Editor and Motion Studio X to help streamline creative workflows. Everything we make is driven by curiosity and the desire to make game development more accessible.</p>
+        
+        <ul class="simple-list">
+            <li>Wetbox framework</li>
+            <li>Pixmancer</li>
+            <li>Restudio Script Editor</li>
+            <li>Motion Studio X (initiative)</li>
+            <li>Restudio funblocks</li>
+        </ul>
+        
+        <p style="margin-top: 20px;">Join us on this journey — explore our tools and projects.</p>
+    </div>
 </div>
 
-<!-- الشريط السفلي - أسود -->
+<!-- Footer with new Funblocks sections: About (Funblocks), Community (Funblocks), Resources (Funblocks) -->
 <footer>
-    <div class="footer-icons">
-        <a href="https://github.com/restudio-games" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="https://www.tiktok.com/@restudiogames" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://www.instagram.com/restudio_games/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://x.com/RESTUDIO_GAMES" target="_blank"><i class="fab fa-x-twitter"></i></a>
-        <a href="https://restudio-games.itch.io/" target="_blank"><i class="fa-brands fa-itch-io"></i></a>
+    <div class="footer-main">
+        <!-- Original legal section -->
+        <div class="footer-section">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="https://restudio-games.github.io/Terms-of-Service-Privacy/" target="_blank">Terms of Service</a></li>
+                <li><a href="https://restudio-games.github.io/Terms-of-Service-Privacy/" target="_blank">Privacy Policy</a></li>
+            </ul>
+        </div>
+        
+        <!-- Original Products (keep existing references) -->
+        <div class="footer-section">
+            <h4>Products</h4>
+            <ul>
+                <li><a href="https://restudio-games.itch.io/wetbox-game-engine" target="_blank">Wetbox framework</a></li>
+                <li><span>Restudio funblocks</span></li>
+                <li><a href="https://restudio-games.github.io/restudio-script-editor/" target="_blank">Restudio Script Editor</a></li>
+                <li><a href="https://restudio-games.itch.io/pixmancer" target="_blank">Pixmancer</a></li>
+                <li><a href="https://restudio-games.github.io/MSX-WEBSITE/" target="_blank">Motion studio X (initiative)</a></li>
+            </ul>
+        </div>
+        
+        <!-- NEW: About (Funblocks) section -->
+        <div class="footer-section">
+            <h4>About (Funblocks)</h4>
+            <ul>
+                <li><a href="https://restudio-games.github.io/Restudio-About-Funblocks-website/" target="_blank">About Us</a></li>
+                <li><a href="https://restudio-games.github.io/Restudio-for-Parents/" target="_blank">For Parents</a></li>
+                <li><a href="https://restudio-games.github.io/Restudio-For-Educators/" target="_blank">For Educators</a></li>
+            </ul>
+        </div>
+        
+        <!-- NEW: Community (Funblocks) section -->
+        <div class="footer-section">
+            <h4>Community (Funblocks)</h4>
+            <ul>
+                <li><a href="https://restudio-games.github.io/Restudio-Community-Guidelines/" target="_blank">Guidelines</a></li>
+            </ul>
+        </div>
+        
+        <!-- NEW: Resources (Funblocks) section -->
+        <div class="footer-section">
+            <h4>Resources (Funblocks)</h4>
+            <ul>
+                <li><a href="https://restudio-games.github.io/Restudio-How-to-Get-Project-Ideas-website/" target="_blank">Starter Projects</a></li>
+                <li><a href="https://restudio-games.github.io/Restudio-How-to-Get-Project-Ideas-website/" target="_blank">Ideas</a></li>
+                <li><a href="https://restudio-games.github.io/Restudio-Help-Center/" target="_blank">Help Center</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer-social">
+        <a href="https://github.com/restudio-games" target="_blank">
+            <img src="https://i.postimg.cc/jjvVFtQH/icon19.png" alt="GitHub">
+        </a>
+        <a href="https://www.tiktok.com/@restudiogames" target="_blank">
+            <img src="https://i.postimg.cc/tRcbbR0r/icon4.png" alt="TikTok">
+        </a>
+        <a href="https://www.instagram.com/restudio_games/" target="_blank">
+            <img src="https://i.postimg.cc/nrFXtH6Z/icon8.png" alt="Instagram">
+        </a>
+        <a href="https://x.com/RESTUDIO_GAMES" target="_blank">
+            <img src="https://i.postimg.cc/rFhrMrVQ/icon2.png" alt="X">
+        </a>
+        <a href="https://restudio-games.itch.io/" target="_blank">
+            <img src="https://i.postimg.cc/Jnmnbr7q/icon17.png" alt="itch.io">
+        </a>
     </div>
     <div class="footer-copy">
         © 2026 Restudio Games. All rights reserved.
@@ -657,89 +471,78 @@ footer {
 </footer>
 
 <script>
-// حالات التطبيق
-let currentPage = 'home';
-
-// وظيفة عرض شاشة التحميل
-function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    loadingScreen.classList.remove('hidden');
+// حل مشكلة التمرير مع الـ sticky header
+function scrollToElementWithOffset(element, offset = 70) {
+    if (!element) return;
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - offset;
     
-    // إخفاء شاشة التحميل بعد 3 ثواني
-    setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-    }, 3000);
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
 }
 
-// وظيفة التبديل بين الصفحات مع شاشة التحميل
-function navigateTo(page) {
-    // إذا كنا بالفعل في الصفحة المطلوبة، لا تفعل شيئاً
-    if (currentPage === page) return;
-    
-    // عرض شاشة التحميل
-    showLoadingScreen();
-    
-    // تحديث الحالة الحالية
-    currentPage = page;
-    
-    // إخفاء القائمة المنسدلة
-    document.getElementById("appsMenu").style.display = "none";
+function scrollToHero() {
+    // الصفحة الرئيسية: نمرر إلى أعلى الصفحة (body)
+    // أفضل طريقة: التمرير إلى القمة الكاملة مع مراعاة الـ header
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+    closeDropdown();
 }
 
-// وظيفة عرض الصفحة الرئيسية
-function showHome() {
-    navigateTo('home');
-    
-    setTimeout(() => {
-        // إخفاء صفحة about
-        const aboutPage = document.getElementById("aboutPage");
-        aboutPage.classList.remove("visible");
-        
-        // إظهار النص الرئيسي
-        const mainText = document.getElementById("mainText");
-        mainText.classList.remove("hidden");
-    }, 100);
+function scrollToAbout() {
+    const aboutSection = document.getElementById('aboutSection');
+    if (aboutSection) {
+        // استخدام 70px تعويض للـ sticky header
+        scrollToElementWithOffset(aboutSection, 70);
+    }
+    closeDropdown();
 }
 
-// وظيفة عرض صفحة about
-function showAbout() {
-    navigateTo('about');
-    
-    setTimeout(() => {
-        // إخفاء النص الرئيسي
-        const mainText = document.getElementById("mainText");
-        mainText.classList.add("hidden");
-        
-        // إظهار صفحة about
-        const aboutPage = document.getElementById("aboutPage");
-        aboutPage.classList.add("visible");
-    }, 100);
-}
-
-// وظيفة التبديل لقائمة التطبيقات
 function toggleApps() {
     const menu = document.getElementById("appsMenu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
 }
 
-// عند تحميل الصفحة، إخفاء شاشة التحميل
-window.addEventListener('load', () => {
-    // إخفاء شاشة التحميل بعد تحميل الصفحة
-    setTimeout(() => {
-        document.getElementById('loadingScreen').classList.add('hidden');
-    }, 500);
-});
+function closeDropdown() {
+    const menu = document.getElementById("appsMenu");
+    if (menu) menu.style.display = "none";
+}
 
-// إغلاق القائمة المنسدلة عند النقر في أي مكان آخر
+// Close dropdown when clicking outside
 window.addEventListener('click', (event) => {
     const menu = document.getElementById("appsMenu");
-    const button = document.querySelector('.dropdown button');
-    
-    if (button && !button.contains(event.target) && !menu.contains(event.target)) {
+    const dropdownBtn = document.querySelector('.dropdown button');
+    if (!menu || !dropdownBtn) return;
+    if (!dropdownBtn.contains(event.target) && !menu.contains(event.target)) {
         menu.style.display = "none";
     }
 });
-</script>
 
+window.addEventListener('load', () => {
+    closeDropdown();
+    
+    // تحقق من وجود أي هاش في الرابط عند التحميل (مثلاً #aboutSection)
+    if (window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (hash === 'aboutSection') {
+            setTimeout(() => {
+                scrollToAbout();
+            }, 100);
+        } else if (hash === 'heroSection') {
+            setTimeout(() => {
+                scrollToHero();
+            }, 100);
+        }
+    }
+});
+</script>
 </body>
 </html>
