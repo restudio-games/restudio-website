@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="ltr">
 <head>
@@ -8,19 +7,23 @@
     <link rel="icon" href="https://i.postimg.cc/66MLbbg8/restudio-profile.png" type="image/png">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/JzYGnt17/restudio-profile.png">
 
-    <!-- modern sans-serif font: Ubuntu + Inter for fallback -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@100;300;400;500;700&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- MapLibre GL JS -->
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" />
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
 
     <style>
+        :root {
+            /* ألوان مخصصة لطبقات الزر (الرينبو) */
+            --layer1-color: #ff6b8a;  /* وردي */
+            --layer2-color: #50B854;  /* أخضر */
+            --layer3-color: #6699CC;  /* أزرق */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -47,7 +50,6 @@
             z-index: 1;
         }
 
-        /* ----- HEADER (BLACK) ----- */
         header {
             position: sticky;
             top: 0;
@@ -128,41 +130,159 @@
             color: #ffffff;
         }
 
-        /* ---- زر التسجيل (تم إزالة جميع تأثيرات HOVER) ---- */
-        .btn-register-card {
-            background: #50B854;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 20px;
-            color: white !important;
+        /* التصميم الجديد لزر Register via RestudioID */
+        .nav button.register-btn-new {
+            all: unset;
+            position: relative;
+            display: inline-flex;
+            height: 2.75rem;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0 1.5rem;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.02em;
             cursor: pointer;
-            display: flex;
+            flex-shrink: 0;
+            gap: 8px;
+            white-space: nowrap;
+            line-height: 1.2;
+            border-bottom: none !important;
+        }
+
+        .register-btn-bg {
+            border-color: rgba(255, 208, 116);
+            background-color: rgba(255, 208, 116);
+        }
+
+        .register-btn-inner,
+        .register-btn-inner-hover,
+        .register-btn-inner-static {
+            pointer-events: none;
+            display: block;
+        }
+
+        .register-btn-inner {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .register-btn-inner-hover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateY(70%);
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
-            border-bottom: none !important;
-            line-height: 1.4;
-            transition: none; /* إلغاء أي تأثير انتقال */
         }
 
-        /* منع أي تغيير عند hover أو focus أو active */
-        .btn-register-card:hover,
-        .btn-register-card:focus,
-        .btn-register-card:active {
-            border-bottom: none !important;
-            transform: none !important;
-            box-shadow: none !important;
-            opacity: 1 !important;
+        .register-btn-bg {
+            overflow: hidden;
+            border-radius: 2rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scale(1);
+            transition: transform 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1;
         }
 
-        .btn-register-card .short-text {
+        .register-btn-bg,
+        .register-btn-bg-layer,
+        .register-btn-bg-layers {
+            display: block;
+        }
+
+        .register-btn-bg-layers {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            top: -60%;
+            aspect-ratio: 1 / 1;
+            width: max(200%, 10rem);
+        }
+
+        .register-btn-bg-layer {
+            border-radius: 9999px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scale(0);
+        }
+
+        .register-btn-bg-layer.-layer1 {
+            background-color: var(--layer1-color);
+        }
+
+        .register-btn-bg-layer.-layer2 {
+            background-color: var(--layer2-color);
+        }
+
+        .register-btn-bg-layer.-layer3 {
+            background-color: var(--layer3-color);
+        }
+
+        .nav button.register-btn-new:hover .register-btn-inner-static {
+            opacity: 0;
+            transform: translateY(-70%);
+            transition:
+                transform 1.4s cubic-bezier(0.19, 1, 0.22, 1),
+                opacity 0.3s linear;
+        }
+
+        .nav button.register-btn-new:hover .register-btn-inner-hover {
+            opacity: 1;
+            transform: translateY(0);
+            transition:
+                transform 1.4s cubic-bezier(0.19, 1, 0.22, 1),
+                opacity 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav button.register-btn-new:hover .register-btn-bg-layer {
+            transition:
+                transform 1.3s cubic-bezier(0.19, 1, 0.22, 1),
+                opacity 0.3s linear;
+        }
+
+        .nav button.register-btn-new:hover .register-btn-bg-layer-1 {
+            transform: scale(1);
+        }
+
+        .nav button.register-btn-new:hover .register-btn-bg-layer-2 {
+            transition-delay: 0.1s;
+            transform: scale(1);
+        }
+
+        .nav button.register-btn-new:hover .register-btn-bg-layer-3 {
+            transition-delay: 0.2s;
+            transform: scale(1);
+        }
+
+        .nav button.register-btn-new .register-btn-icon {
+            font-size: 0.85rem;
+            color: inherit;
+        }
+
+        .nav button.register-btn-new .register-btn-full-text {
+            display: inline;
+        }
+
+        .nav button.register-btn-new .register-btn-short-text {
             display: none;
         }
 
-        /* ---- الأفاتار الدائري في الهيدر ---- */
         .nav-avatar {
             width: 40px;
             height: 40px;
@@ -196,7 +316,6 @@
             color: #e5e7eb;
         }
 
-        /* ----- HERO with BANNER BACKGROUND ----- */
         .hero-section {
             position: relative;
             text-align: center;
@@ -210,7 +329,7 @@
             align-items: center;
             justify-content: center;
             border: 1px solid #e2e2e2;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .hero-section::before {
@@ -289,7 +408,7 @@
             letter-spacing: -0.02em;
             color: #ffffff;
             line-height: 1.15;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .main-title span {
@@ -301,13 +420,12 @@
             font-family: 'Inter', sans-serif;
             font-size: 1.15rem;
             font-weight: 400;
-            color: rgba(255,255,255,0.92);
+            color: rgba(255, 255, 255, 0.92);
             margin-top: 16px;
             letter-spacing: 0.3px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
         }
 
-        /* ----- ABOUT ----- */
         .about-section {
             margin-bottom: 48px;
             scroll-margin-top: 80px;
@@ -315,7 +433,7 @@
             padding: 32px 36px;
             border-radius: 16px;
             border: 1px solid #e2e2e2;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .about-section h2 {
@@ -445,7 +563,6 @@
             margin-right: 8px;
         }
 
-        /* ----- FOOTER (محسّن للجوال) ----- */
         footer {
             width: 100%;
             background: #ffffff;
@@ -571,7 +688,6 @@
             border-top: 1px solid #f1f5f9;
         }
 
-        /* ===== MEDIA QUERIES للجوال ===== */
         @media (max-width: 768px) {
             .footer-main {
                 grid-template-columns: repeat(2, 1fr);
@@ -579,31 +695,25 @@
                 padding-bottom: 20px;
                 margin-bottom: 20px;
             }
-
             .footer-section h4 {
                 font-size: 0.65rem;
                 margin-bottom: 8px;
                 padding-left: 6px;
             }
-
             .footer-section a {
                 font-size: 0.72rem;
             }
-
             .footer-social {
                 gap: 20px;
             }
-
             .footer-social a {
                 width: 36px;
                 height: 36px;
                 font-size: 16px;
             }
-
             .footer-support-link {
                 font-size: 0.75rem;
             }
-
             footer {
                 padding: 20px 14px 12px;
             }
@@ -616,44 +726,36 @@
                 padding-bottom: 16px;
                 margin-bottom: 16px;
             }
-
             .footer-section h4 {
                 font-size: 0.6rem;
                 margin-bottom: 6px;
                 padding-left: 5px;
                 border-left-width: 2px;
             }
-
             .footer-section a {
                 font-size: 0.68rem;
                 padding: 1px 0;
             }
-
             .footer-section li {
                 margin-bottom: 4px;
             }
-
             .footer-social {
                 gap: 14px;
                 margin: 8px 0 10px;
             }
-
             .footer-social a {
                 width: 32px;
                 height: 32px;
                 font-size: 14px;
             }
-
             .footer-support-link {
                 font-size: 0.7rem;
                 gap: 4px;
             }
-
             .footer-copy {
                 font-size: 0.55rem;
                 padding-top: 4px;
             }
-
             footer {
                 padding: 16px 10px 10px;
             }
@@ -664,11 +766,9 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 12px 8px;
             }
-
             .footer-section h4 {
                 font-size: 0.55rem;
             }
-
             .footer-section a {
                 font-size: 0.6rem;
             }
@@ -698,7 +798,8 @@
             .about-section {
                 padding: 24px 20px;
             }
-            .historical-note-plain, .about-section p {
+            .historical-note-plain,
+            .about-section p {
                 font-size: 0.95rem;
             }
         }
@@ -719,7 +820,26 @@
             }
         }
 
-        /* ===== MODAL STYLES FOR RESTUDIO ACCOUNT ===== */
+        @media (max-width: 600px) {
+            .nav button.register-btn-new .register-btn-full-text {
+                display: none;
+            }
+            .nav button.register-btn-new .register-btn-short-text {
+                display: inline;
+            }
+            .nav button.register-btn-new {
+                height: 2.5rem;
+                padding: 0 1.1rem;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (min-width: 601px) {
+            .nav button.register-btn-new .register-btn-short-text {
+                display: none;
+            }
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -750,8 +870,14 @@
         }
 
         @keyframes modalFade {
-            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-close {
@@ -790,9 +916,8 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* نمط الخلفية البديل عندما لا توجد صورة banner */
         .account-banner.no-banner {
-            --s: 80px; /* حجم أصغر قليلاً ليتناسب مع العرض */
+            --s: 80px;
             --_g: #dc9d37 25%, #fed450 0 50%, #0000 0;
             --_l1: #fff 0 1px, #0000 0 calc(25% - 1px), #fff 0 25%;
             --_l2: #fff 0 1px, #0000 0 calc(50% - 1px), #fff 0 50%;
@@ -823,7 +948,7 @@
             background-size: cover;
             background-position: center;
             border: 3px solid #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -884,7 +1009,6 @@
             color: #6b7280;
         }
 
-        /* أزرار المودال الجديدة */
         .modal-actions {
             display: flex;
             flex-wrap: wrap;
@@ -924,7 +1048,6 @@
             background: #c0392b;
         }
 
-        /* ===== MAP CONTAINER STYLES ===== */
         .map-section {
             margin-top: 16px;
             border-top: 1px solid #e5e7eb;
@@ -987,7 +1110,6 @@
             color: #d1d5db;
         }
 
-        /* Custom marker style for MapLibre */
         .custom-marker {
             width: 18px;
             height: 18px;
@@ -1003,7 +1125,6 @@
             transform: scale(1.3);
         }
 
-        /* MapLibre popup styling */
         .maplibregl-popup-content {
             border-radius: 8px;
             padding: 10px 14px;
@@ -1038,14 +1159,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
-        /* For mobile responsiveness of nav button */
         @media (max-width: 600px) {
-            .btn-register-card .full-text {
-                display: none;
-            }
-            .btn-register-card .short-text {
-                display: inline;
-            }
             .modal-content {
                 padding: 16px;
                 max-width: 95vw;
@@ -1072,13 +1186,6 @@
             }
         }
 
-        @media (min-width: 601px) {
-            .btn-register-card .short-text {
-                display: none;
-            }
-        }
-
-        /* تعديلات إضافية للأفاتار في شريط التنقل */
         .nav-avatar .fallback-icon {
             font-size: 1.4rem;
             color: #e5e7eb;
@@ -1099,30 +1206,40 @@
             <i class="fas fa-heart"></i> About
         </button>
 
-        <!-- زر التسجيل (تم إزالة HOVER بالكامل) -->
-        <button id="registerBtn" class="btn-register-card" onclick="triggerRestudioCard()">
-            <i class="fas fa-id-card"></i>
-            <span class="full-text">Register via RestudioID</span>
-            <span class="short-text">Register via RestudioID</span>
+        <!-- زر التسجيل بالتصميم الجديد مع متغيرات الألوان -->
+        <button id="registerBtn" class="register-btn-new" onclick="triggerRestudioCard()">
+            <span class="register-btn-bg">
+                <span class="register-btn-bg-layers">
+                    <span class="register-btn-bg-layer register-btn-bg-layer-1 -layer1"></span>
+                    <span class="register-btn-bg-layer register-btn-bg-layer-2 -layer2"></span>
+                    <span class="register-btn-bg-layer register-btn-bg-layer-3 -layer3"></span>
+                </span>
+            </span>
+            <span class="register-btn-inner">
+                <span class="register-btn-inner-static">
+                    <i class="fas fa-id-card register-btn-icon"></i>
+                    <span class="register-btn-full-text">Register via RestudioID</span>
+                    <span class="register-btn-short-text">Register via RestudioID</span>
+                </span>
+                <span class="register-btn-inner-hover">
+                    <i class="fas fa-id-card register-btn-icon"></i>
+                    <span class="register-btn-full-text">Register via RestudioID</span>
+                    <span class="register-btn-short-text">Register via RestudioID</span>
+                </span>
+            </span>
         </button>
 
-        <!-- الأفاتار الدائري (مخفي في البداية) -->
         <div id="avatarNav" class="nav-avatar" style="display: none;" onclick="showProfileFromStorage()">
-            <!-- سيتم ملؤه بواسطة الجافاسكريبت -->
         </div>
     </div>
 </header>
 
-<!-- Hidden file input for RestudioID Card -->
 <input type="file" id="restudioCardFileInput" accept=".json,application/json" style="display:none;" />
 
-<!-- Restudio Account Modal -->
 <div id="restudioAccountModal" class="modal-overlay">
     <div class="modal-content">
         <button class="modal-close" onclick="closeRestudioModal()">&times;</button>
-        <div id="restudioAccountDetails">
-            <!-- Dynamic content will be inserted here -->
-        </div>
+        <div id="restudioAccountDetails"></div>
     </div>
 </div>
 
@@ -1253,7 +1370,6 @@
 </footer>
 
 <script>
-    // ===== Scroll functions =====
     function scrollToElementWithOffset(element, offset = 70) {
         if (!element) return;
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
@@ -1279,7 +1395,6 @@
         loadProfileFromStorage();
     });
 
-    // ===== RestudioID Card Functions =====
     let currentMapInstance = null;
     let currentProfileData = null;
 
@@ -1387,7 +1502,6 @@
         }
     }
 
-    // ===== دالة لتنزيل البطاقة (Take out your card) =====
     function downloadCard() {
         if (!currentProfileData) {
             alert('No card data available.');
@@ -1405,12 +1519,11 @@
         URL.revokeObjectURL(url);
     }
 
-    // ===== دالة تسجيل الخروج (LOG OUT) =====
     function logout() {
         if (confirm('Are you sure you want to log out? Your card data will be removed from this browser.')) {
             localStorage.removeItem('restudioProfile');
             currentProfileData = null;
-            registerBtn.style.display = 'flex';
+            registerBtn.style.display = 'inline-flex';
             avatarNav.style.display = 'none';
             avatarNav.innerHTML = '';
             closeRestudioModal();
@@ -1595,14 +1708,14 @@
             console.warn('MapLibre failed, using iframe fallback:', error);
             const bbox = [lng - 0.01, lat - 0.01, lng + 0.01, lat + 0.01].join('%2C');
             mapContainer.innerHTML = `
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    marginheight="0" 
-                    marginwidth="0" 
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}" 
+                <iframe
+                    width="100%"
+                    height="100%"
+                    frameborder="0"
+                    scrolling="no"
+                    marginheight="0"
+                    marginwidth="0"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}"
                     style="border:0; border-radius:10px; width:100%; height:100%;"
                     loading="lazy"
                 ></iframe>
